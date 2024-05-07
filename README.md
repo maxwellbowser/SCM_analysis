@@ -9,7 +9,7 @@ I'm creating this repository as a User Guide for future people in the Gregorio L
 
 ## Setup Specifications
 * Aurora ASI600A (Software version)
-* Linux Ubuntu (Change)
+* Linux KDE Shell, Ubuntu Kernel
 
 ## User Guide
 There are 2 scripts in this repo, an automated version of the SCM analysis, and a more manual version.
@@ -33,13 +33,13 @@ The above numbers don't need to match, only the layout of the text, where it **b
 
 After hitting "OK" on this pop up, you will see the first force trace (Figure 2).
 
-![force trace of cell, starting with a step function](README_files/image-2.png)
+![force trace of cell, starting with a step function](README_files/image-2.png)  
 *Figure 2: Trace of filtered cell force.*
 
 To calculate the difference between 2 areas, **you simply click and drag on the graph to select one area, then the next**. These points in these two areas are then averaged and displayed in the bottom panel (Figure 3)!
 
 
-![selecting area on force trace](<README_files/SM_GIF better.gif>)
+![selecting area on force trace](<README_files/SM_GIF better.gif>)  
 *Figure 3: Gif of selecting cell force trace.*
 
 
@@ -48,7 +48,7 @@ To calculate the difference between 2 areas, **you simply click and drag on the 
 
 To continue onto the next selected file, you close the window, at which point the next file is opened (Figure 4).
 
-![SCM analysis cycling to next file](<README_files/SC_Gif CLosing.gif>)
+![SCM analysis cycling to next file](<README_files/SC_Gif CLosing.gif>)  
 *Figure 4: Gif of closing cell force trace, to cycle to next file.*  
 
 After doing all files, the program closes and opens a folder containing CSVs of the filtered forces.
@@ -70,7 +70,8 @@ This difference is saved, along with the cell widths.
 
 Our file naming convention is that the file names contain the % of activating solution in the mixture, with 100% and 0% being named differently, as "Passive" or "Active".
 
-From this, the pCa chart in the Excel file has all of the % mixtures possible, and the free Ca++ associated (calculated using [this calculator](https://somapp.ucdmc.ucdavis.edu/pharmacology/bers/maxchelator/CaMgATPEGTA-TS.htm) by UCDavis). 
+From this, the pCa chart in the Excel file has all of the % mixtures possible, and the free Ca++ associated (calculated using [this calculator](https://somapp.ucdmc.ucdavis.edu/pharmacology/bers/maxchelator/CaMgATPEGTA-TS.htm) hosted by UCDavis). 
+## Insert already calculated values & Table
 
 #### Folders should be formatted as:
 ```bash
@@ -104,7 +105,7 @@ From this, the pCa chart in the Excel file has all of the % mixtures possible, a
 
 After selecting and running, the output file contains 2 sheets. The first sheet (Figure 5) has columns for the Cell #, the % of activating solution (derived from the file name), and the forces. 
 
-<div align = "center">
+<div>
 <img src="README_files/image-3.png"> 
 </div>
 
@@ -112,7 +113,7 @@ After selecting and running, the output file contains 2 sheets. The first sheet 
 
 The second sheet (Figure 6) has the cell dimensions, provided that they are entered according the Aurora Setup Notes convention mentioned in [Manual Version](#manual-version).
 
-<div align = "center">
+<div>
 <img src="README_files/image-4.png"> 
 </div>
 

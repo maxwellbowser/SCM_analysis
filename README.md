@@ -12,7 +12,7 @@ I'm creating this repository as a User Guide for future people in the Gregorio L
 * Linux KDE Shell, Ubuntu Kernel
 
 ## User Guide
-There are 2 scripts in this repo, an automated version of the SCM analysis, and a more manual version.
+There are 2 scripts in this repo, an automated version of the SCM analysis (pCa_SCM_analysis.py), and a more manual version (pCa_SCM_analysis_manual.py).
 
 ## Manual Version:
 In the manual version, you select all of the force recording files done for a single cell (should be .dat files), then are shown the force traces one by one. 

@@ -17,12 +17,12 @@ There are 2 scripts in this repo, an automated version of the SCM analysis, and 
 ## Manual Version:
 In the manual version, you select all of the force recording files done for a single cell (should be .dat files), then are shown the force traces one by one. 
 
-When the first file is opened, you are shown the cell dimensions (Figure 1), provided you write them in the Aurora Setup notes tab as:  
-**Comment: Mouse C843 Cell 1**  
+When the first file is opened, you are shown the cell dimensions (Figure 1), provided you write them in the Aurora Setup Comment tab as:  
+**Mouse C843 Cell 1**  
 **Width 0.0316**  
 **Thick 0.0158**
 
-The above numbers don't need to match, only the layout of the text, where it **begins with "Comment:" and "Width" & "Thick" following it.**
+The above numbers don't need to match, only the layout of the text, where it **begins with a line of text (Mouse ID, etc.) and "Width" & "Thick" following it.**
 
 <div align = "center">
 <img src="README_files/image.png" alt="pop up window showing cell thickness and width" width="200"/>
@@ -64,16 +64,34 @@ The automated version does the same basic calculation as the manual one. The ord
 3. **Averages the next 5 ms** 
 4. **Calculates the difference between them**
 
-This difference is saved, along with the cell widths.
+This difference is saved, along with the cell widths. I've chosen the times based on tests I ran, comparing the manual calculations to the automated version (Figure 5). The pause time of 40ms is optimized for a filtering strength of 10, this all may be changed in the top of the code, but **I highly reccomend to run tests on any timing changes**.
+
+![three graphs, showing force values between automated analysis and hand analysis.](README_files/image-5.png)
+*Figure 5: Graphs of analysis data, testing different times for step 3 of analysis (see above). Hand measurements (or "Old Force") in blue show the desired values. I tested 5ms, 10ms, and 25ms and saw that 5ms gave the best results, mainly in the highest Ca values. This is because high Ca cells quickly recover force, therefore a shorter average time does not include the "rebound" in force.*
 
 **IMPORTANT:** Rather than selecting all of the raw files, you select one folder containing all of the cell recordings.
 
-Our file naming convention is that the file names contain the % of activating solution in the mixture, with 100% and 0% being named differently, as "Passive" or "Active".
+Our file naming convention is that the file names contain the % of activating solution in the mixture, with 100% and 0% being named differently, as "Passive" or "Active". If a file is process that does not follow this convention, a warning is thrown and the program asks for input of what % of activating solution to use.
 
-From this, the pCa chart in the Excel file has all of the % mixtures possible, and the free Ca++ associated (calculated using [this calculator](https://somapp.ucdmc.ucdavis.edu/pharmacology/bers/maxchelator/CaMgATPEGTA-TS.htm) hosted by UCDavis). 
-## Insert already calculated values & Table
+From the % of activating, the pCa chart in the Excel file has all of the % single-digit mixtures possible, and the free Ca++ associated (calculated using [this calculator](https://somapp.ucdmc.ucdavis.edu/pharmacology/bers/maxchelator/CaMgATPEGTA-TS.htm) hosted by UCDavis). 
 
-#### Folders should be formatted as:
+The concentrations for these buffers are shown below (Table 1). The calculation of [Ca] in buffers with chelators is pretty tricky, so please use caution when creating new buffer recipes. All of these buffers and solutions were calculated by Gerrie Farman, my mentor, who has many many years of experience.
+
+Buffer Concentrations (pH to 7.00)
+-------------------		
+Reagent | Relax (mM) |	Activating (mM)
+--------|------------|-------
+ATP	|6.3100	|6.2700
+MgCl2|	5.7000| 5.7400
+EGTA	|2.0000|	2.0000
+Calcium	|0.0000	|2.1815
+Kprop	|156	|156
+BES	|10|	10
+DTT|	1	|1
+
+
+
+### Folder Layout for Analysis:
 ```bash
 |-- Folder_to_Select
     |-- Cell 1
@@ -109,7 +127,7 @@ After selecting and running, the output file contains 2 sheets. The first sheet 
 <img src="README_files/image-3.png"> 
 </div>
 
-*Figure 5: Automated SCM analysis output Sheet 1, calculated forces and Ca++ concentration.* 
+*Figure 6: Automated SCM analysis output Sheet 1, calculated forces and Ca++ concentration.* 
 
 The second sheet (Figure 6) has the cell dimensions, provided that they are entered according the Aurora Setup Notes convention mentioned in [Manual Version](#manual-version).
 
@@ -117,7 +135,11 @@ The second sheet (Figure 6) has the cell dimensions, provided that they are ente
 <img src="README_files/image-4.png"> 
 </div>
 
+*Figure 7: Automated SCM analysis output Sheet 2, cell dimensions.*
 
+## Results
 
-*Figure 6: Automated SCM analysis output Sheet 2, cell dimensions.*
+After developing the automated version of this analyis, I checked the accuracy of my analysis by also doing analysis manually. The results are plotted below (Figure 9). I felt comfortable enough with these results to move forward only using automated analysis, as I also found I had a 1-2% margin when doing manual analysis. 
 
+![two graphs showing comparative data of analyzed analysis and manual analysis](README_files/image-6.png)
+*Figure 9: Graphs of 2 days of SCM data, with 6-8 cells per Ca point, analyzed manually (red) as well as automated (blue).*

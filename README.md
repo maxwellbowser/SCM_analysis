@@ -145,5 +145,20 @@ After developing the automated version of this analyis, I checked the accuracy o
 ![two graphs showing comparative data of analyzed analysis and manual analysis](README_files/image-6.png)  
 *Figure 9: Graphs of 2 days of SCM data, with 6-8 cells per Ca point, analyzed manually (red) as well as automated (blue).*
 
-To do the final analysis, if using the automated version, copy & paste cell forces into the provided excel sheet along with the cell sizes.
+To do the final analysis, if using the automated version, copy & paste cell forces into the provided excel sheet along with the cell sizes. There is also a video below (No audio, sorry) showing how to use the excel sheet, where to copy everything over. If there are more cells than formulas in the Norm Force column, just use excel's autofill function to extend the formulas down.
+
+<video controls src="README_files/Example Analysis.mp4" title="Title"></video>
+
+If you just want the forces normalized to the size of the cell, you're done!
+
+For the Gregorio lab, I usually copy the normalized forces & [ca++] into Graphpad, check for outliers, and plot. You can then fit a curve using the Hill equation:  
+
+```
+Y = Top*(x^HillSlope)/((x^HillSlope)+(LogEC50^HillSlope))
+```
+with all inital values of 1 and rules of:
+- Top: *YMAX
+- HillSlope: *SIGN(YATXMAX - YATXMIN)
+- LogEC50: *(Value of X a YMID)
+
 

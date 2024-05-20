@@ -3,7 +3,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
-from tkinter import messagebox
 
 import sys
 import os
@@ -17,7 +16,7 @@ import numpy as np
 
 from scipy.ndimage import gaussian_filter
 import ctypes
-import matplotlib.pyplot as plt
+import warnings
 
 
 def main():
@@ -38,6 +37,15 @@ def main():
         root.destroy()
 
     filtering_amount = 10
+
+    # Placing these here to make them easy to change if desired...
+
+    # This is how many data points (i.e. ms if sampling rate = 1kHz) to average for the baseline
+    FIRST_AVG = 200
+    # This is how long the motor arm takes to move, which is lengthened as filtering # increases
+    PAUSE = 40
+    # This is how many data points to average for the change in force, a small number seems to work better for high Ca points
+    SECOND_AVG = 5
 
     # Gui Creation:
 
@@ -191,9 +199,12 @@ def main():
             )
 
             data = full_data_df["Fin"].values
-            base_force = np.mean(data[:200])  # Average the first 200ms for a baselined
+
+            base_force = np.mean(
+                data[:FIRST_AVG]
+            )  # Average the first 200ms for a baselined (set by first average #)
             step_force = np.mean(
-                data[240:245]
+                data[(FIRST_AVG + PAUSE) : (FIRST_AVG + PAUSE + SECOND_AVG)]
             )  # Give 40ms for the motor to move, then average the next 5ms for the changed force (smaller thing seems to be better)
 
             force_diff = abs(base_force - step_force) * 1000  # From mN to uN
@@ -208,6 +219,13 @@ def main():
 
                 elif "passive" in filename.strip().lower():
                     conc_activating = 0
+
+                else:
+                    warnings.warn(
+                        f"Non-conforming filename... please enter correct % activating for {filename}"
+                    )
+                    correct_activ = input(">>").strip()
+                    conc_activating = int(correct_activ)
 
             # Appending cell data
             difference_dict["Cell #"].append(cell_num)

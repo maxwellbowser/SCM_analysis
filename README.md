@@ -58,10 +58,9 @@ After doing all files, the program closes and opens a folder containing CSVs of 
 The automated version of this analysis is **much** faster, however it only will work correctly if the files are correctly formatted. This is why I reccomend doing the by-hand analysis first, to have something to compare to.
 
 The automated version does the same basic calculation as the manual one. The order of operations for each file is:
-1. **Averages the first 200 ms**   
-
-2. **Waits 40 ms**
-3. **Averages the next 5 ms** 
+1. **Averages the first 200 ms** (variable "FIRST_AVG" in .py file)   
+2. **Waits 40 ms** (variable "PAUSE" in .py file)
+3. **Averages the next 5 ms** (variable "SECOND_AVG" in .py file)
 4. **Calculates the difference between them**
 
 This difference is saved, along with the cell widths. I've chosen the times based on tests I ran, comparing the manual calculations to the automated version (Figure 5). The pause time of 40ms is optimized for a filtering strength of 10, this all may be changed in the top of the code, but **I highly reccomend to run tests on any timing changes**.

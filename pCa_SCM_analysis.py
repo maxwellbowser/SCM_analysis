@@ -1,4 +1,4 @@
-"""Written using Python 3.12"""
+"""Written using Python 3.11"""
 
 import tkinter as tk
 from tkinter import ttk
@@ -12,10 +12,9 @@ import pandas as pd
 import random
 import string
 import numpy as np
-
+import time
 
 from scipy.ndimage import gaussian_filter
-import ctypes
 import warnings
 
 
@@ -25,7 +24,10 @@ def main():
 
     """
     # For higher resolution screens (just personal thing)
-    ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    if sys.platform == "win32":
+        import ctypes
+
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
     def select_files(event=None):
         global root_folder
@@ -131,10 +133,15 @@ def main():
                 filename = file[:-4]
 
             # TBH I got this from stackoverflow
-            DAT_df = pd.DataFrame(
-                [i.strip().split() for i in open(working_filepath).readlines()]
-            )
+            try:
+                DAT_df = pd.DataFrame(
+                    [i.strip().split() for i in open(working_filepath).readlines()]
+                )
 
+            except UnicodeDecodeError:
+                print(f"Uh Oh, Corrupted File! Please check: {filename}")
+                time.sleep(2)
+                continue
             # We only want to do this for the first file of "Cell n"
             # If there is already a value for the cell, do nothing
             try:
@@ -257,7 +264,13 @@ def main():
 
     print("All Done!")
     folder = os.getcwd()
-    os.startfile(folder)
+
+    # Mac/Linux/Windows compatability to open the output folder
+    if sys.platform == "win32":
+        os.startfile(folder)
+    else:
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, folder])
     sys.exit()
 
 

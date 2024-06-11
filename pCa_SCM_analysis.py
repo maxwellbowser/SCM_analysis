@@ -286,7 +286,7 @@ def main():
     else:
         opener = "open" if sys.platform == "darwin" else "xdg-open"
         subprocess.call([opener, folder])
-    sys.exit()
+    exit()
 
 
 if __name__ == "__main__":

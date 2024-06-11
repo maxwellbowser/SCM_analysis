@@ -14,10 +14,10 @@ import random
 import string
 import matplotlib.pyplot as plt
 from matplotlib.widgets import SpanSelector
+import time
 
 
 from scipy.ndimage import gaussian_filter
-import ctypes
 
 
 def main():
@@ -26,7 +26,10 @@ def main():
 
     """
     # For higher resolution screens (just personal thing)
-    ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    if sys.platform == "win32":
+        import ctypes
+
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
     def select_files(event=None):
         filetypes = (("All Files", "*.*"),)
@@ -146,12 +149,20 @@ def main():
 
     for file in filepath:
         filename = os.path.basename(file)
-        if ".dat" in filename:
-            filename = filename[:-4]
+
+        # On mac, there is a hidden metadata file named ".DS_Store"
+        # if found, skip that file
+        if file[0] == ".":
+            continue
 
         # TBH I got this from stackoverflow
-        DAT_df = pd.DataFrame([i.strip().split() for i in open(file).readlines()])
+        try:
+            DAT_df = pd.DataFrame([i.strip().split() for i in open(file).readlines()])
 
+        except UnicodeDecodeError:
+            print(f"Uh Oh, Corrupted File! Please check: {filename}")
+            time.sleep(2)
+            continue
         # Finding Thickness
         comments = DAT_df.loc[DAT_df[0] == "Comment:"].index.to_list()
 
@@ -256,7 +267,11 @@ def main():
 
     print("All Done!")
     folder = os.getcwd()
-    os.startfile(folder)
+    if sys.platform == "win32":
+        os.startfile(folder)
+    else:
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, folder])
     sys.exit()
 
 

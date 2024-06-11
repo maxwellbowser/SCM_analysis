@@ -5,7 +5,7 @@ from tkinter import ttk
 from tkinter import filedialog as fd
 
 import sys
-import os
+import os, subprocess
 from pathlib import Path
 
 import pandas as pd
@@ -128,20 +128,29 @@ def main():
             working_filepath = Path(working_filepath)
             cell_num = int(working_filepath.parent.name[-1])
 
+            # On mac, there is a hidden metadata file named ".DS_Store"
+            # if found, skip that file
+            if file[0] == ".":
+                continue
+
             # Making a basename, for human reading
-            if ".dat" in file:
+            elif ".dat" in file or ".txt" in file:
                 filename = file[:-4]
 
-            # TBH I got this from stackoverflow
+            else:
+                filename = file
+
+            # TBH I got this from stackoverflow for reading DAT files
             try:
                 DAT_df = pd.DataFrame(
                     [i.strip().split() for i in open(working_filepath).readlines()]
                 )
 
             except UnicodeDecodeError:
-                print(f"Uh Oh, Corrupted File! Please check: {filename}")
+                print(f"Uh Oh, Corrupted File! Please check: {file}")
                 time.sleep(2)
                 continue
+
             # We only want to do this for the first file of "Cell n"
             # If there is already a value for the cell, do nothing
             try:
@@ -149,7 +158,7 @@ def main():
 
             # Else, find and save values to thickness_dict
             except IndexError:
-                # Finding Thickness, which is right after the first use of "Comment:"
+                # Finding Thickness, which is right after the first use of "Comment:"f
                 comments = DAT_df.loc[DAT_df[0] == "Comment:"].index.to_list()
 
                 thickness = (
@@ -170,7 +179,13 @@ def main():
 
             # This is finding the parameters' start & end
             # Looks for "time", where the second and third instance are the boundries for the timing
-            parameter_locs = DAT_df.loc[DAT_df[0] == "Time"].index.tolist()
+            try:
+                parameter_locs = DAT_df.loc[DAT_df[0] == "Time"].index.tolist()
+            except KeyError:
+                print(
+                    f"File '{filename}' in Folder {working_filepath.parent.name} does not comply with convention and was therefore skipped! Please check {filename} to ensure this was correct..."
+                )
+                continue
             parameter_locs[2] -= 2
 
             # Preparing the data to be analyzed

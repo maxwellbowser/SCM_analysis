@@ -19,8 +19,8 @@ In the manual version, you select all of the force recording files done for a si
 
 When the first file is opened, you are shown the cell dimensions (Figure 1), provided you write them in the Aurora Setup Comment tab as:  
 **Mouse C843 Cell 1**  
-**Width 0.0316**  
-**Thick 0.0158**
+**Width 0.0394**  
+**Thick 0.0197**
 
 The above numbers don't need to match, only the layout of the text, where it **begins with a line of text (Mouse ID, etc.) and "Width" & "Thick" following it.**
 
